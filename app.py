@@ -79,6 +79,13 @@ def print_items(state_key, delay):
         time.sleep(delay)
     time.sleep(1)
 
+def get_item_index(state_key):  # for state_key in ['1', '2']
+    for i, item in enumerate(state_dict[state_key][3]):
+        print(f'  [{i}]  {item}')
+    index = int(input(state_dict[state_key][5]))
+    if index in range(len(state_dict[state_key][3])):
+        return index
+
 # Clear terminal
 def clear_console():
     command = 'clear'
