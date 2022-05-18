@@ -73,6 +73,10 @@ class ItemsMenu(Menu):
         super().__init__(menu_type, menu_options)
         self.file_name = file_name
         self.items = read_file(file_name)
+    
+    def print_items(self, is_indexed: bool, time_delay: float, final_delay: float):
+        print_list(self.items, is_indexed, time_delay)
+        time.sleep(final_delay)
 
 state_dict = {
     '0': [
