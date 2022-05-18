@@ -98,6 +98,12 @@ class ItemsMenu(Menu):
         else:
             print(f'{item} is already in our {self.type} list')
 
+    def update_item(self):
+        index = self.get_item_index()
+        self.items[index] = input(
+            f'Enter the updated {self.type} name: '
+        ).strip().title()
+
 
 state_dict = {
     '0': [
