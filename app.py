@@ -77,6 +77,21 @@ class ItemsMenu(Menu):
     def print_items(self, is_indexed: bool, time_delay: float, final_delay: float):
         print_list(self.items, is_indexed, time_delay)
         time.sleep(final_delay)
+    
+    def get_item_index(self) -> int:
+        self.print_items(True, 0, 0.5)
+        try:
+            index = int(input(f'Enter the {self.type} number: '))
+            if index in range(len(self.items)):
+                return index
+            else:
+                print(f'InputError: Not a valid {self.type} number')
+                return None
+        except:
+            print(f'InputError: Not a valid {self.type} number')
+            return None
+
+
 
 state_dict = {
     '0': [
