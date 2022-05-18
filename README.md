@@ -14,6 +14,12 @@ Backend for a cafe application, with command line interaction.
 
 
 # Project Requirements from Generation:
+## Week 2:
+In addition to week 1 requirements:
+- Create, read, update or delete couriers in/from a list
+- Read to and write from .txt files
+- Persist list of products and couriers in corresponding .txt files
+
 ## Week 1:
 - Create a list of products and view all products.
 - Be able to add/update/delete a product.
