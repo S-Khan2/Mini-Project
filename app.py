@@ -40,6 +40,16 @@ menu_dict = {
     '2' : ['Couriers Menu', couriers_menu_options]
 }
 
+def display_menu_options(menu_key):
+    print(menu_dict(menu_key)[0])
+    for i, choice in enumerate(menu_dict(menu_key)[1]):
+        print(f'  [{i}]  {choice}')
+
+def get_menu_option(menu_key):
+    display_logo()
+    display_menu_options(menu_key)
+    return input(f'Enter option: ')
+
 # Clear terminal
 def clear_console():
     command = 'clear'
