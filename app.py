@@ -34,15 +34,32 @@ couriers_menu_options = [
     'Delete Courier'
 ]
 
-menu_dict = {
-    '0' : ['Main Menu', main_menu_options],
-    '1' : ['Products Menu', product_menu_options],
-    '2' : ['Couriers Menu', couriers_menu_options]
+state_dict = {
+    '0': [
+        'Main Menu',
+        main_menu_options
+    ],
+    '1': [
+        'Products Menu',
+        product_menu_options,
+        PRODUCTS_FILE_NAME,  # Not needed, but could be handy if we update continuously
+        [],  # list of products has index 3
+        'Enter new product name: ',
+        'Enter product number: '
+    ],
+    '2': [
+        'Couriers Menu',
+        couriers_menu_options,
+        COURIERS_FILE_NAME,  # Not needed, but could be handy if we update continuously
+        [],  # list of couriers has index 3
+        'Enter new courier name: ',
+        'Enter courier number: '
+    ]
 }
 
 def display_menu_options(menu_key):
-    print(menu_dict(menu_key)[0])
-    for i, choice in enumerate(menu_dict(menu_key)[1]):
+    print(state_dict(menu_key)[0])
+    for i, choice in enumerate(state_dict(menu_key)[1]):
         print(f'  [{i}]  {choice}')
 
 def get_menu_option(menu_key):
