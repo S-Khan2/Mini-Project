@@ -3,13 +3,19 @@
 import os       # Helpful to clear terminal
 import time     # Helpful to add waiting times
 from logo import logo     # Collects my logo from 'logo.py'
+from file_handler import * # read_file and write_file
 
-# Create list of products
-products = [
-    'Coke Zero',
-    'Fanta', 
-    'Tea', 
-    'Coffee'
+PRODUCTS_FILE_NAME = 'products.txt'
+COURIERS_FILE_NAME = 'couriers.txt'
+
+# Load list of products and couriers
+products = read_file(PRODUCTS_FILE_NAME)
+couriers = read_file(COURIERS_FILE_NAME)
+
+main_menu_options = [
+    'Exit', 
+    'Products Menu',
+    'Couriers Menu'
     ]
 
 product_menu_options = [
@@ -19,6 +25,20 @@ product_menu_options = [
     'Update Existing Product', 
     'Delete Product'
     ]
+
+couriers_menu_options = [
+    'Main Menu',
+    'Print Couriers List',
+    'Create New Courier',
+    'Update Existing Courier',
+    'Delete Courier'
+]
+
+menu_dict = {
+    '0' : ['Main Menu', main_menu_options],
+    '1' : ['Products Menu', product_menu_options],
+    '2' : ['Couriers Menu', couriers_menu_options]
+}
 
 # Clear terminal
 def clear_console():
