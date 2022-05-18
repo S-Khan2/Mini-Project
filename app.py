@@ -73,6 +73,12 @@ def get_menu_option(state_key):
         time.sleep(1)
         return get_menu_option(state_key)
 
+def print_items(state_key, delay):
+    for item in state_dict[state_key][3]:
+        print(f'  {item}')
+        time.sleep(delay)
+    time.sleep(1)
+
 # Clear terminal
 def clear_console():
     command = 'clear'
