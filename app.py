@@ -62,10 +62,16 @@ def display_menu_options(menu_key):
     for i, choice in enumerate(state_dict(menu_key)[1]):
         print(f'  [{i}]  {choice}')
 
-def get_menu_option(menu_key):
+def get_menu_option(state_key):
     display_logo()
-    display_menu_options(menu_key)
-    return input(f'Enter option: ')
+    display_menu_options(state_key)
+    option = input(f'Enter option: ').strip()
+    if int(option) in range(len(state_dict[state_key])):
+        return option
+    else:
+        print('\nInputError: Please enter a valid integer')
+        time.sleep(1)
+        return get_menu_option(state_key)
 
 # Clear terminal
 def clear_console():
