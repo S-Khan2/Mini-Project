@@ -91,6 +91,12 @@ class ItemsMenu(Menu):
             print(f'InputError: Not a valid {self.type} number')
             return None
 
+    def append_item(self):
+        item = input(f'Enter the name of new {self.type}: ').strip().title()
+        if not(item in self.items):
+            self.items.append(item)
+        else:
+            print(f'{item} is already in our {self.type} list')
 
 
 state_dict = {
