@@ -4,10 +4,9 @@ Backend for a cafe application, with command line interaction.
 
 ## app.py
 - Hard-codes the menu options and textfile names.
-- Creates a menu dictionary storing relevant information for each menu.
-- Contains methods to get user's choice from any menu, and user's choice of product / courier after displaying them.
-- Depending on user input, the app either exits or goes to product / courier menu from the main menu.
-- At the product / courier menu, the user either returns to the main menu, sees the list of products/couriers, or adds / updates / deletes a product / courier.
+- Menu class has basic functionality - print menu options, get user's option, and tracks whether or not it is active.
+- ItemsMenu class inherits attribute and methods from parent Menu class.
+- In addition, it can select / add / update / delete a product / courier from the list.
 - After each change, the textfiles are updated.
 - Returns to the same menu after using the product / courier menu.
 
