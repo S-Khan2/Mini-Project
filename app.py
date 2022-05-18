@@ -32,7 +32,7 @@ couriers_menu_options = [
 ]
 
 class Menu:
-    def __init__(self, menu_type: str, menu_options: List[str], is_active=False):
+    def __init__(self, menu_type: str, menu_options: list[str], is_active=False):
         self.type = menu_type
         self.options = menu_options
         self.is_active = is_active
@@ -68,6 +68,11 @@ class Menu:
         print(f'\nLoading {self.type.title()} Menu ...')
         time.sleep(time_delay / 2)
 
+class ItemsMenu(Menu):
+    def __init__(self, menu_type: str, menu_options: list[str], file_name: str):
+        super().__init__(menu_type, menu_options)
+        self.file_name = file_name
+        self.items = read_file(file_name)
 
 state_dict = {
     '0': [
