@@ -107,6 +107,12 @@ class ItemsMenu(Menu):
     def delete_item(self):
         del self.items[self.get_item_index()]
 
+def get_active(menus: list[Menu]) -> int:
+    for index, is_active in enumerate([menu.is_active for menu in menus]):
+        if is_active:
+            return index
+    return None
+
 
 state_dict = {
     '0': [
