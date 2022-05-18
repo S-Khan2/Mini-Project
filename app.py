@@ -116,64 +116,6 @@ def get_active(menus: list[Menu]) -> int:
             return index
     return None
 
-
-state_dict = {
-    '0': [
-        'Main Menu',
-        main_menu_options
-    ],
-    '1': [
-        'Products Menu',
-        product_menu_options,
-        PRODUCTS_FILE_NAME,  # Not needed, but could be handy if we update continuously
-        [],  # list of products has index 3
-        'Enter new product name: ',
-        'Enter product number: '
-    ],
-    '2': [
-        'Couriers Menu',
-        couriers_menu_options,
-        COURIERS_FILE_NAME,  # Not needed, but could be handy if we update continuously
-        [],  # list of couriers has index 3
-        'Enter new courier name: ',
-        'Enter courier number: '
-    ]
-}
-
-def display_menu_options(menu_key):
-    print(state_dict[menu_key][0])
-    for i, choice in enumerate(state_dict[menu_key][1]):
-        print(f'  [{i}]  {choice}')
-
-def get_menu_option(state_key):
-    display_logo()
-    display_menu_options(state_key)
-    option = input(f'Enter option: ').strip()
-    if int(option) in range(len(state_dict[state_key][1])):
-        return option
-    else:
-        print('\nInputError: Please enter a valid integer')
-        time.sleep(1)
-        return get_menu_option(state_key)
-
-def print_items(state_key, delay):
-    for item in state_dict[state_key][3]:
-        print(f'  {item}')
-        time.sleep(delay)
-    time.sleep(1)
-
-def get_item_index(state_key):  # for state_key in ['1', '2']
-    for i, item in enumerate(state_dict[state_key][3]):
-        print(f'  [{i}]  {item}')
-    index = int(input(state_dict[state_key][5]))
-    if index in range(len(state_dict[state_key][3])):
-        return index
-
-def delay_loading_menu(state_key, time_delay):
-    time.sleep(time_delay / 2)
-    print(f'\nLoading {state_dict[state_key][0]} ...')
-    time.sleep(time_delay / 2)
-
 # Clear terminal
 def clear_terminal():
     command = 'clear'
@@ -197,53 +139,35 @@ def close_app():
     exit()
 
 # App runs from here onwards
-# Load products and couriers into lists
-state_dict['1'][3] = read_file(PRODUCTS_FILE_NAME)
-state_dict['2'][3] = read_file(COURIERS_FILE_NAME)
+main_menu = Menu('main', main_menu_options, True)
+product_menu = ItemsMenu('product', product_menu_options, PRODUCTS_FILE_NAME)
+courier_menu = ItemsMenu('courier', couriers_menu_options, COURIERS_FILE_NAME)
+menus = (main_menu, product_menu, courier_menu) # irreplacable objects 
+menu_index = 0
 
-# Start at main menu
-state_key = '0'
-# menu_changed = False
-while state_key != None:
-    menu_option = get_menu_option(state_key)
+while menu_index != None:
+    current_menu = menus[menu_index]
+    current_option = current_menu.get_option()
+    if menu_index == 0 and current_option == 0:
+        main_menu.is_active = False
+    elif menu_index == 0:
+        current_menu.switch_to(menus[current_option])
+    elif current_option == 0:
+        current_menu.switch_to(main_menu)
+    elif current_option == 1:
+        current_menu.print_items(False, 0.5, 2)
+    elif current_option == 2:
+        current_menu.append_item()
+        current_menu.save()
+    elif current_option == 3:
+        current_menu.update_item()
+        current_menu.save()
+    elif current_option == 4:
+        current_menu.delete_item()
+        current_menu.save()
 
-    if state_key == '0' and menu_option == '0':
-        state_key = None
-        # menu_changed = False
-    elif state_key == '0':
-        state_key = menu_option
-        # menu_changed = True
-    elif menu_option == '0':  # Go to main menu
-        state_key = '0'
-        # menu_changed = True
-    elif menu_option == '1':
-        print()
-        print_items(state_key, 0.5)
-        # After printing add a delay: (i) Press enter (ii) Sleep for a little
-        # input('Press ENTER to return to main menu')
-        # menu_changed = False
-    elif menu_option == '2':  # add item and save file
-        # Add only if item is not in list
-        item = input(state_dict[state_key][4]).strip().title()
-        if not(item in state_dict[state_key][3]):
-            state_dict[state_key][3].append(item)
-            write_file(state_dict[state_key][2], state_dict[state_key][3])
-        else:
-            print(f'{item} is already in the list')
-        # menu_changed = False
-    elif menu_option == '3':  # update item and save file
-        index = get_item_index(state_key)
-        state_dict[state_key][3][index] = input(
-            state_dict[state_key][4]).strip().title()
-        write_file(state_dict[state_key][2], state_dict[state_key][3])
-        # menu_changed = False
-    elif menu_option == '4':  # delete item and save file
-        del state_dict[state_key][3][get_item_index(state_key)]
-        write_file(state_dict[state_key][2], state_dict[state_key][3])
-        # menu_changed = False
+    menu_index = get_active(menus)
+    if menu_index != None:
+        menus[menu_index].delay_loading_menu(1.5)
 
-    # Add a delay time from loading
-    if state_key != None:
-        delay_loading_menu(state_key, 1.5)
-
-close_app()       
+close_app()     
