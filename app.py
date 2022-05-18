@@ -104,6 +104,9 @@ class ItemsMenu(Menu):
             f'Enter the updated {self.type} name: '
         ).strip().title()
 
+    def delete_item(self):
+        del self.items[self.get_item_index()]
+
 
 state_dict = {
     '0': [
