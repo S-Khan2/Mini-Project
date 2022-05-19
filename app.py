@@ -4,32 +4,32 @@ import os       # Helpful to clear terminal
 import time     # Helpful to add waiting times
 from logo import logo     # Collects my logo from 'logo.py'
 from file_handler import read_file, write_file
-from list_handler import print_list
+import list_handler as lh # print_list, get_item_from
 
 PRODUCTS_FILE_NAME = 'products.txt'
 COURIERS_FILE_NAME = 'couriers.txt'
 ORDERS_FILE_NAME = 'orders.json'
 
 main_menu_options = [
-    'Exit', 
-    'Products Menu',
-    'Couriers Menu',
-    'Orders Menu'
-    ]
+    'Exit',
+    'Product Menu',
+    'Courier Menu',
+    'Order Menu'
+]
 
 product_menu_options = [
-    'Main Menu', 
-    'Print Product List', 
+    'Main Menu',
+    'Print Products List',
     'Create New Product',
-    'Update Existing Product', 
+    'Update an Existing Product',
     'Delete Product'
-    ]
+]
 
-couriers_menu_options = [
+courier_menu_options = [
     'Main Menu',
     'Print Couriers List',
     'Create New Courier',
-    'Update Existing Courier',
+    'Update an Existing Courier',
     'Delete Courier'
 ]
 
@@ -49,22 +49,58 @@ order_keys = [
     "status"
 ]
 
+order_statuses = [
+    'Preparing...',
+    'On the way...',
+    'Knock, knock...',
+    'Delivered!'
+]
+
 class Item:
     def __init__(self, item_type: str, item_keys = ['name'], item_values = None):
         self.type = item_type
         self.keys = item_keys
         self.content = dict()
         if item_values == None:
+            # When adding item to list
             for key in self.keys:
-                self.content[key] = input(f'For this {item_type}, enter the {key}: ').strip().title()
+                if key == order_keys[-2]:
+                    # TODO: Print list of couriers, and get index of courier
+                    global courier_menu
+                    print(f'For this {self.type}, choose a courier from below: ')
+                    courier_index = courier_menu.get_item_index()
+                    courier = courier_menu.items[courier_index]
+                    self.content[key] = courier.content['name']
+                elif key == order_keys[-1]:
+                    self.content[key] = order_statuses[0]
+                else:
+                    self.content[key] = input(f'For this {item_type}, enter the {key}: ').strip().title()
         else:
+            # When loading item from file
             self.content = dict(zip(item_keys, item_values))
 
     def update(self):
         for key in self.keys:
-            updated_input = input(f'For this {self.type}, enter the updated {key} or leave blank: ').strip().title()
-            if updated_input:
-                self.content[key] = updated_input
+            if key == order_keys[-2]:
+                global courier_menu
+                courier_index = courier_menu.get_item_index()
+                try:
+                    courier = courier_menu.items[courier_index]
+                    self.content[key] = courier.content['name']
+                except:
+                    print('Courier is not updated')
+            elif key == order_keys[-1]:
+                updated_status = lh.get_item_from(order_statuses)
+                if updated_status != None:
+                    self.content[key] = updated_status
+                else:
+                    print('Status is not updated')
+            else:
+                updated_input = input(f'For this {self.type}, enter the updated {key} or leave blank: ').strip().title()
+                if updated_input:
+                    self.content[key] = updated_input
+                else:
+                    print(f'{key.title()} is not updated')
 
     def print(self, time_gap):
         if len(self.keys) > 1:
@@ -87,6 +123,7 @@ class Item:
                 return True
         return False
 
+
 class Menu:
     def __init__(self, menu_type: str, menu_options: list[str], is_active=False):
         self.type = menu_type
@@ -100,7 +137,7 @@ class Menu:
 
     def print_options(self):
         print(f'{self.type.title()} Menu:')
-        print_list(self.options, True, 0)
+        lh.print_list(self.options, True, 0)
 
     def get_option(self) -> int:
         display_logo()
@@ -118,11 +155,12 @@ class Menu:
             time.sleep(1)
             return self.get_option()
 
-    def delay_loading_menu(self, time_delay):
+    def delay_loading_menu(self, time_delay: float):
         time.sleep(time_delay / 2)
         # display_logo()
         print(f'\nLoading {self.type.title()} Menu ...')
         time.sleep(time_delay / 2)
+
 
 class ItemsMenu(Menu):
     def __init__(self, menu_type: str, menu_options: list[str], file_name: str, item_keys = ['name']):
@@ -139,7 +177,7 @@ class ItemsMenu(Menu):
         else:
             print('Did not recognise file type')
         self.item_keys = item_keys
-    
+
     def save(self):
         if self.file_type == 'txt':
             contents = [item.content['name'] for item in self.items]
@@ -153,7 +191,7 @@ class ItemsMenu(Menu):
                 print(f'  [{i}]', end="")
             item.print(time_gap)
         time.sleep(final_delay)
-    
+
     def get_item_index(self) -> int:
         self.print_items(True, 0, 0.5)
         try:
@@ -184,42 +222,47 @@ class ItemsMenu(Menu):
         if isinstance(index, int):
             del self.items[index]
 
+
 def get_active(menus: list[Menu]) -> int:
     for index, is_active in enumerate([menu.is_active for menu in menus]):
         if is_active:
             return index
     return None
 
-# Clear terminal
+
 def clear_terminal():
+    '''Clear terminal, independant of operation system'''
     command = 'clear'
     if os.name in ('nt', 'dos'):  # If Machine is running on Windows, use cls
         command = 'cls'
     os.system(command)
 
-# Clear terminal and print logo
-def display_logo():
-    clear_terminal()
-    # print(logo) # Comment out when debugging
 
-# Close application after a delay
+def display_logo(): 
+    '''Clear terminal and print logo'''
+    clear_terminal()
+    return None # Temporarily do not print logo
+    print(logo)
+
+
 def close_app(menus: list[Menu]):
     '''Close application after saving files'''
     display_logo()
     print('Saving files and closing application...')
+    # If there were more files to save, we could run a 'for loop' through all ItemsMenu objects
     for menu in menus[1:]:
         menu.save()
     time.sleep(1)
     clear_terminal()
     print('\n     See you next time!\n')
 
-# App runs from here onwards
-if __name__ == "__main__":
+
+if __name__ == '__main__':
     main_menu = Menu('main', main_menu_options, True)
     product_menu = ItemsMenu('product', product_menu_options, PRODUCTS_FILE_NAME)
-    courier_menu = ItemsMenu('courier', couriers_menu_options, COURIERS_FILE_NAME)
+    courier_menu = ItemsMenu('courier', courier_menu_options, COURIERS_FILE_NAME)
     order_menu = ItemsMenu('order', order_menu_options, ORDERS_FILE_NAME, order_keys)
-    menus = (main_menu, product_menu, courier_menu) # irreplacable objects 
+    menus = (main_menu, product_menu, courier_menu, order_menu)
     menu_index = 0
 
     while menu_index != None:
@@ -247,4 +290,4 @@ if __name__ == "__main__":
         if menu_index != None:
             menus[menu_index].delay_loading_menu(1.5)
 
-    close_app(menus)     
+    close_app(menus)
