@@ -8,6 +8,7 @@ from list_handler import print_list
 
 PRODUCTS_FILE_NAME = 'products.txt'
 COURIERS_FILE_NAME = 'couriers.txt'
+ORDERS_FILE_NAME = 'orders.json'
 
 main_menu_options = [
     'Exit', 
@@ -29,6 +30,22 @@ couriers_menu_options = [
     'Create New Courier',
     'Update Existing Courier',
     'Delete Courier'
+]
+
+order_menu_options = [
+    'Main Menu',
+    'Print Orders List',
+    'Create New Order',
+    'Update an Existing Order',
+    'Delete Order'
+]
+
+order_keys = [
+    "customer\'s name",
+    "customer\'s address",
+    "customer\'s phone number",
+    "courier\'s name",
+    "status"
 ]
 
 class Menu:
