@@ -140,7 +140,11 @@ class ItemsMenu(Menu):
         self.item_keys = item_keys
     
     def save(self):
-        write_file(self.file_name, self.items)
+        if self.file_type == 'txt':
+            contents = [item.content['name'] for item in self.items]
+        elif self.file_type == 'json':
+            contents = [item.content for item in self.items]
+        write_file(self.file_name, contents)
 
     def print_items(self, is_indexed: bool, time_delay: float, final_delay: float):
         print_list(self.items, is_indexed, time_delay)
