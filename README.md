@@ -3,15 +3,17 @@ Backend for a cafe application, with command line interaction.
 
 # How it Functions?
 ## app.py
-- Hard-codes the menu options and textfile names.
+- Hard-codes the menu options, order keys and file names.
+- Item class - Handles creation and updating of a single item (product/courier/order).
 - Menu class has basic functionality - print menu options, get user's option, and track whether or not it is active.
 - ItemsMenu class inherits attributes and methods from parent Menu class.
-- In addition, it can select/add/update/delete a product/courier from the list.
-- After each change, the textfiles are updated.
+- In addition, it can select/add/update/delete an item from the list.
+- After each change, the TXT and JSON files are updated.
 - Returns to the same menu after using the product/courier menu.
 
 ## file_handler.py
 - Read/write a list of strings from/into a textfile
+- Read/write a list of dicts from/into a JSON file
 
 ## list_handler.py
 - Print a list of strings with time gaps
