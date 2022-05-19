@@ -167,7 +167,7 @@ class ItemsMenu(Menu):
             return None
 
     def append_item(self):
-        item = input(f'Enter the name of new {self.type}: ').strip().title()
+        item = Item(self.type, self.item_keys)
         if not(item in self.items):
             self.items.append(item)
         else:
@@ -175,12 +175,13 @@ class ItemsMenu(Menu):
 
     def update_item(self):
         index = self.get_item_index()
-        self.items[index] = input(
-            f'Enter the updated {self.type} name: '
-        ).strip().title()
+        if isinstance(index, int):
+            self.items[index].update()
 
     def delete_item(self):
-        del self.items[self.get_item_index()]
+        index = self.get_item_index()
+        if isinstance(index, int):
+            del self.items[index]
 
 def get_active(menus: list[Menu]) -> int:
     for index, is_active in enumerate([menu.is_active for menu in menus]):
