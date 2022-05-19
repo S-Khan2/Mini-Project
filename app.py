@@ -3,7 +3,7 @@
 import os       # Helpful to clear terminal
 import time     # Helpful to add waiting times
 from logo import logo     # Collects my logo from 'logo.py'
-from file_handler import * # read_file and write_file
+from file_handler import read_file, write_file
 from list_handler import print_list
 
 PRODUCTS_FILE_NAME = 'products.txt'
@@ -13,7 +13,8 @@ ORDERS_FILE_NAME = 'orders.json'
 main_menu_options = [
     'Exit', 
     'Products Menu',
-    'Couriers Menu'
+    'Couriers Menu',
+    'Orders Menu'
     ]
 
 product_menu_options = [
@@ -166,9 +167,9 @@ class ItemsMenu(Menu):
             print(f'InputError: Not a valid {self.type} number')
             return None
 
-    def append_item(self):
+    def add_item(self):
         item = Item(self.type, self.item_keys)
-        if not(item in self.items):
+        if not(item.exists_in(self.items)):
             self.items.append(item)
         else:
             print(f'{item} is already in our {self.type} list')
@@ -199,25 +200,25 @@ def clear_terminal():
 # Clear terminal and print logo
 def display_logo():
     clear_terminal()
-    print(logo)
+    # print(logo) # Comment out when debugging
 
 # Close application after a delay
 def close_app(menus: list[Menu]):
+    '''Close application after saving files'''
     display_logo()
-    print('Closing application...')
-    # Thought: Now we could store the product list update
+    print('Saving files and closing application...')
     for menu in menus[1:]:
         menu.save()
     time.sleep(1)
     clear_terminal()
-    print('Application closed')
-    exit()
+    print('\n     See you next time!\n')
 
 # App runs from here onwards
 if __name__ == "__main__":
     main_menu = Menu('main', main_menu_options, True)
     product_menu = ItemsMenu('product', product_menu_options, PRODUCTS_FILE_NAME)
     courier_menu = ItemsMenu('courier', couriers_menu_options, COURIERS_FILE_NAME)
+    order_menu = ItemsMenu('order', order_menu_options, ORDERS_FILE_NAME, order_keys)
     menus = (main_menu, product_menu, courier_menu) # irreplacable objects 
     menu_index = 0
 
@@ -233,7 +234,7 @@ if __name__ == "__main__":
         elif current_option == 1:
             current_menu.print_items(False, 0.5, 2)
         elif current_option == 2:
-            current_menu.append_item()
+            current_menu.add_item()
             current_menu.save()
         elif current_option == 3:
             current_menu.update_item()
