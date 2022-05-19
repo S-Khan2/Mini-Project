@@ -1,17 +1,20 @@
 # Mini-Project
 Backend for a cafe application, with command line interaction.
-# How it Functions?
 
+# How it Functions?
 ## app.py
 - Hard-codes the menu options and textfile names.
-- Menu class has basic functionality - print menu options, get user's option, and tracks whether or not it is active.
-- ItemsMenu class inherits attribute and methods from parent Menu class.
-- In addition, it can select / add / update / delete a product / courier from the list.
+- Menu class has basic functionality - print menu options, get user's option, and track whether or not it is active.
+- ItemsMenu class inherits attributes and methods from parent Menu class.
+- In addition, it can select/add/update/delete a product/courier from the list.
 - After each change, the textfiles are updated.
-- Returns to the same menu after using the product / courier menu.
+- Returns to the same menu after using the product/courier menu.
 
 ## file_handler.py
-- Read / write a list of strings from / into a textfile
+- Read/write a list of strings from/into a textfile
+
+## list_handler.py
+- Print a list of strings with time gaps
 
 ## logo.py
 - Currently contain's the logo for this terminal-based application, which shall appear at the top of the visible terminal.
