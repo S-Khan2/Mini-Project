@@ -21,6 +21,11 @@ Backend for a cafe application, with command line interaction.
 
 
 # Project Requirements from Generation:
+## Week 3:
+In addition to week 2 requirements:
+- Create, read, update or delete orders into/from a list
+- When creating/updating an order, display products and couriers before selection
+- Read/write list of orders into/from CSV or JSON file
 ## Week 2:
 In addition to week 1 requirements:
 - Create, read, update or delete couriers in/from a list
