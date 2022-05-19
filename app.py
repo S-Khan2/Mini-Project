@@ -124,10 +124,20 @@ class Menu:
         time.sleep(time_delay / 2)
 
 class ItemsMenu(Menu):
-    def __init__(self, menu_type: str, menu_options: list[str], file_name: str):
+    def __init__(self, menu_type: str, menu_options: list[str], file_name: str, item_keys = ['name']):
         super().__init__(menu_type, menu_options)
         self.file_name = file_name
-        self.items = read_file(file_name)
+        self.file_type = file_name.split('.')[-1]
+        contents = read_file(file_name)
+        self.items = []
+        # In python 3.10.4, there is a 'match-case' approach 
+        if self.file_type == 'txt':
+            self.items = [Item(self.type, item_values = [item]) for item in contents]
+        elif self.file_type == 'json':
+            self.items = [Item(self.type, item.keys(), item.values()) for item in contents]
+        else:
+            print('Did not recognise file type')
+        self.item_keys = item_keys
     
     def save(self):
         write_file(self.file_name, self.items)
