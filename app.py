@@ -146,8 +146,11 @@ class ItemsMenu(Menu):
             contents = [item.content for item in self.items]
         write_file(self.file_name, contents)
 
-    def print_items(self, is_indexed: bool, time_delay: float, final_delay: float):
-        print_list(self.items, is_indexed, time_delay)
+    def print_items(self, is_indexed: bool, time_gap: float, final_delay: float):
+        for i, item in enumerate(self.items):
+            if is_indexed:
+                print(f'  [{i}]', end="")
+            item.print(time_gap)
         time.sleep(final_delay)
     
     def get_item_index(self) -> int:
