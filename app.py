@@ -48,6 +48,44 @@ order_keys = [
     "status"
 ]
 
+class Item:
+    def __init__(self, item_type: str, item_keys = ['name'], item_values = None):
+        self.type = item_type
+        self.keys = item_keys
+        self.content = dict()
+        if item_values == None:
+            for key in self.keys:
+                self.content[key] = input(f'For this {item_type}, enter the {key}: ').strip().title()
+        else:
+            self.content = dict(zip(item_keys, item_values))
+
+    def update(self):
+        for key in self.keys:
+            updated_input = input(f'For this {self.type}, enter the updated {key} or leave blank: ').strip().title()
+            if updated_input:
+                self.content[key] = updated_input
+
+    def print(self, time_gap):
+        if len(self.keys) > 1:
+            for key, value in self.content.items():
+                print(f'  {key}: {value}')
+            print()
+        else:
+            print(f"  {self.content.get('name')}")
+        time.sleep(time_gap)
+
+    def exists_in(self, items: list['Item']) -> bool:
+        exists_in = False
+        for item in items:
+            exists_in = True
+            for key in item.keys:
+                if self.content.get(key) != item.content.get(key):
+                    exists_in = False
+                    break
+            if exists_in:
+                return True
+        return False
+
 class Menu:
     def __init__(self, menu_type: str, menu_options: list[str], is_active=False):
         self.type = menu_type
