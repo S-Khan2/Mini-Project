@@ -1,6 +1,6 @@
 # orders.py
 # Module to handle an order
-
+# Inherit functionality from parent (ItemsMenu) and grandparent (Menu)
 
 from menu import Menu
 from items import Item, ItemsMenu
@@ -107,3 +107,26 @@ class Order(Item):
                 )
                 if updated_input:
                     self.content[key] = updated_input
+
+
+# Can a class be an argument? Then we can refactor further.
+class OrdersMenu(ItemsMenu):
+    def __init__(self, menu_type: str, menu_options: list[str], file_name: str, 
+                item_keys: list[str], product_menu: ItemsMenu, 
+                courier_menu: ItemsMenu, statuses: list[str]):
+        Menu.__init__(self, menu_type, menu_options, False)
+        self.file_name = file_name
+        self.product_menu = product_menu
+        self.courier_menu = courier_menu
+        self.statuses = statuses
+        contents = read_csvfile(file_name)
+        self.items = [Order(self.type, list(item.keys()), product_menu, courier_menu, statuses, item.values()) for item in contents]
+        self.item_keys = item_keys
+
+    def add_item(self):
+        item = Order(self.type, self.item_keys, self.product_menu, 
+                    self.courier_menu, self.statuses)
+        if item.exists_in(self.items):
+            print(f"{item} is already in our {self.type} list")
+        else:
+            self.items.append(item)
