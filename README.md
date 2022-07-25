@@ -23,6 +23,10 @@ Backend for a cafe application, with command line interaction.
 
 
 # Project Requirements from Generation:
+## Week 4:
+In continuation to week 3 requirements:
+- Persist all products, couriers and orders into CSV files
+- When updating an order, allow for empty inputs (to not update that value)
 ## Week 3:
 In addition to week 2 requirements:
 - Create, read, update or delete orders into/from a list
